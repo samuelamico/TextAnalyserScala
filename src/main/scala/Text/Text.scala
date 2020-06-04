@@ -43,8 +43,37 @@ object TextInterface extends TextRef{
     }
   }
 
-  def readMultipleLines(texto: TextContent,n: Int,m: Int): List[Line] = {
+  def readMultipleLines(texto: TextContent,n: Int,m: Int): List[Line] = (n,m) match {
+    case (x,y) if (x > y) => Nil
+    case (x,y) => readLine(texto,x) :: readMultipleLines(texto,x+1,y)
+  }
 
+  def capitalizeLine(line: Line): Line = {
+    new Line (line.content.toUpperCase)
+  }
+
+  def textWordCount(text: TextContent): Stream[(String,Int)] = {
+    val words = text.content.split(" ")
+
+    val output = for {
+      (k,b) <- words.groupBy(identity)
+      val str = k.toString
+      val n = b.length
+    } yield (str,n)
+
+    output.toStream
+  }
+
+  def LineWordCount(line: Line): List[(String,Int)] = {
+    val words = line.content.split(" ")
+
+    val output = for {
+      (k,b) <- words.groupBy(identity)
+      val str = k.toString
+      val n = b.length
+    } yield (str,n)
+
+    output.toList
   }
 
 
