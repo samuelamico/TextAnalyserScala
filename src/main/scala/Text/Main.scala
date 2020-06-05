@@ -27,7 +27,12 @@ object Main extends App{
   //print(dialogo2)
 
   val keys = EncryptionInterface.normalize_key("mitzuplick")
-  println(keys)
+  //println(keys)
 
+  val text = Encryption("oia chuchu","mitzuplick",maintable)
+
+  val encryText = EncryptionInterface.encode(text)
+
+  println(encryText)
 }
 
