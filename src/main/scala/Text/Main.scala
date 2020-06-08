@@ -1,5 +1,6 @@
 
 package Text
+
 import org.scalameter._
 
 object Main extends App{
@@ -36,18 +37,25 @@ object Main extends App{
 
   //println(encryText)
 
-  /** Parallel Encryption String */
+  /** Parallel Encryption String
+   * Just teste the Task and ScalaMeter configuration */
 
-
-
-  val time = withWarmer(new Warmer.Default) measure {EncryptionInterface.encode(text)  }
+  val time = config(
+    Key.exec.minWarmupRuns -> 20,
+    Key.exec.maxWarmupRuns ->60,
+    Key.verbose -> true
+  ) withWarmer(new Warmer.Default) measure {EncryptionInterface.encode(text)  }
 
   println(time)
+
 
   val e1 = task {
     EncryptionInterface.encode(text)
   }
   val v1 = e1.join()
+
+
+
 
 }
 

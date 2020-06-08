@@ -37,6 +37,32 @@ object EncryptionInterface extends EncryptionRef {
       text.mkString
     }
 
+    def encodeList(lista: List[Line],maintable: List[String],chave: String): Unit ={
+        val result = for{
+          item <- lista
+          val encr = new Encryption(item.content,chave,maintable)
+        }yield(println(encode(encr)))
+
+    }
+
+    def splitListTask(lines: Int, task: Int): IndexedSeq[(Int,Int)]= {
+        val maxTask = Math.min(lines,task)
+        val l = if( (lines % task) == 0){
+            0 to lines-1 by lines/task
+        }else{
+          (0 to lines-(lines % task) by (lines-(lines % task))/(maxTask-1)) ++ List(lines)
+        }
+        l zip l.tail
+    }
+
+    def parallelEnc(texto: TextContent,numTask: Int,maintable: List[String],chave: String): Unit = {
+      val strip = splitListTask(texto.content.split("\\\\n").length, numTask)
+
+      val tasks = strip.map(x => task {encodeList(TextInterface.readMultipleLines(texto,x._1,x._2),maintable,chave) })
+
+      tasks map (_.join())
+    }
+
 }
 
 
