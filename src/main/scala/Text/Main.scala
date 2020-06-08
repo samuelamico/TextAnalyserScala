@@ -1,6 +1,6 @@
 
 package Text
-
+import org.scalameter._
 
 object Main extends App{
   val resource = TextInterface.readSource("C:\\Users\\samfs\\Desktop\\Scala\\Projetos\\TextAnalyserScala\\Dialog.txt")
@@ -26,6 +26,7 @@ object Main extends App{
 
   //print(dialogo2)
 
+  /** Encryption String */
   val keys = EncryptionInterface.normalize_key("mitzuplick")
   //println(keys)
 
@@ -33,6 +34,20 @@ object Main extends App{
 
   val encryText = EncryptionInterface.encode(text)
 
-  println(encryText)
+  //println(encryText)
+
+  /** Parallel Encryption String */
+
+
+
+  val time = withWarmer(new Warmer.Default) measure {EncryptionInterface.encode(text)  }
+
+  println(time)
+
+  val e1 = task {
+    EncryptionInterface.encode(text)
+  }
+  val v1 = e1.join()
+
 }
 
