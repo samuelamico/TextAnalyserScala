@@ -15,10 +15,23 @@ object ParalleMain extends App {
 
 
   val time = config(
-    Key.exec.minWarmupRuns -> 20,
+    Key.exec.minWarmupRuns -> 60,
     Key.exec.maxWarmupRuns ->60,
     Key.verbose -> true
   ) withWarmer(new Warmer.Default) measure {EncryptionInterface.parallelEnc(dialogo1,2,maintable,"mitzuplick") }
 
+  println("---------- COMPARE WITH SEQUENTIAL ------------")
+  val time2 = config(
+    Key.exec.minWarmupRuns -> 60,
+    Key.exec.maxWarmupRuns ->60,
+    Key.verbose -> true
+  ) withWarmer(new Warmer.Default) measure {
+    val Lines = TextInterface.readMultipleLines(dialogo1,0,5)
+
+    EncryptionInterface.encodeList(Lines,maintable,"mitzuplick")
+  }
+
+  println(s" Time with Parallel = $time VS Time with Sequential = $time2")
+  
 
 }
